@@ -1,4 +1,3 @@
-# utils.py
 """
 Contains utility functions for converting between primitive and conserved
 variables, and for calculating physical flux vectors. These are fundamental
@@ -15,10 +14,10 @@ def cons_to_prim_general(U):
     rho = U[0]
     # Add a small epsilon to avoid division by zero for vacuum states
     epsilon = 1e-12
-    u = U[1] / (rho + epsilon)
-    v = U[2] / (rho + epsilon)
+    u = U[1] / (rho + epsilon) # conservative -> rho*u
+    v = U[2] / (rho + epsilon) # conservative -> rho*v
     # Ensure pressure is non-negative
-    p = np.maximum((GAMMA - 1) * (U[3] - 0.5 * rho * (u**2 + v**2)), 1e-9)
+    p = np.maximum((GAMMA - 1) * (U[3] - 0.5 * rho * (u**2 + v**2)), 1e-9) # Eq. of state p = (gamma - 1)*(E - 1/2*rho*(u^2+v^2))
     return rho, u, v, p
 
 def primitive_to_conserved_general(P):
