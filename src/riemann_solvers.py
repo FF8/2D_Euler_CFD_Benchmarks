@@ -22,14 +22,16 @@ def hll_flux(U_L, U_R, direction='x'):
     F_L, _ = get_flux_general(U_L_rot)
     F_R, _ = get_flux_general(U_R_rot)
     
-    c_L = np.sqrt(GAMMA*p_L/rho_L) # These are the sound speeds 
-    c_R = np.sqrt(GAMMA*p_R/rho_R) 
+    # --- ROBUSTNESS FIX ---
+    # Ensure arguments to sqrt are non-negative
+    c_L = np.sqrt(GAMMA * np.maximum(p_L, 1e-9) / np.maximum(rho_L, 1e-9))
+    c_R = np.sqrt(GAMMA * np.maximum(p_R, 1e-9) / np.maximum(rho_R, 1e-9))
     
-    S_L = np.minimum(u_L-c_L, u_R-c_R) # These are the wave speeds 
-    S_R = np.maximum(u_L+c_L, u_R+c_R)
+    S_L = np.minimum(u_L - c_L, u_R - c_R)
+    S_R = np.maximum(u_L + c_L, u_R + c_R)
     
-    den = S_R-S_L+1e-9
-    F_HLL = (S_R*F_L-S_L*F_R+S_L*S_R*(U_R_rot-U_L_rot))/den
+    den = S_R - S_L + 1e-9
+    F_HLL = (S_R * F_L - S_L * F_R + S_L * S_R * (U_R_rot - U_L_rot)) / den
     
     flux_rot = np.where(S_L[np.newaxis, ...] >= 0, F_L, F_HLL)
     flux_rot = np.where(S_R[np.newaxis, ...] <= 0, F_R, flux_rot)
@@ -54,12 +56,15 @@ def hllc_flux(U_L, U_R, direction='x', wave_speed_method='roe'):
         
     rho_L, u_L, v_L, p_L = cons_to_prim_general(U_L_rot)
     rho_R, u_R, v_R, p_R = cons_to_prim_general(U_R_rot)
-    c_L = np.sqrt(GAMMA*p_L/rho_L)
-    c_R = np.sqrt(GAMMA*p_R/rho_R)
+    
+    # --- ROBUSTNESS FIX ---
+    # Ensure arguments to sqrt are non-negative
+    c_L = np.sqrt(GAMMA * np.maximum(p_L, 1e-9) / np.maximum(rho_L, 1e-9))
+    c_R = np.sqrt(GAMMA * np.maximum(p_R, 1e-9) / np.maximum(rho_R, 1e-9))
 
     if wave_speed_method == 'roe':
         E_L=U_L_rot[3]; E_R=U_R_rot[3]; h_L=(E_L+p_L)/rho_L; h_R=(E_R+p_R)/rho_R
-        sqrt_rho_L=np.sqrt(rho_L); sqrt_rho_R=np.sqrt(rho_R)
+        sqrt_rho_L=np.sqrt(np.maximum(rho_L, 1e-9)); sqrt_rho_R=np.sqrt(np.maximum(rho_R, 1e-9))
         u_roe=(sqrt_rho_L*u_L+sqrt_rho_R*u_R)/(sqrt_rho_L+sqrt_rho_R)
         h_roe=(sqrt_rho_L*h_L+sqrt_rho_R*h_R)/(sqrt_rho_L+sqrt_rho_R)
         # v_sq_roe term here would not exist in a purely 1D solver
