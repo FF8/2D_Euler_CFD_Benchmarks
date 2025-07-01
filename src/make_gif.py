@@ -19,7 +19,8 @@ def create_gif(image_folder='output_frames', gif_name='simulation.gif', fps=15):
 
     print(f"Found {len(filenames)} frames. Creating GIF...")
     
-    with imageio.get_writer(gif_name, mode='I', fps=fps) as writer:
+    # The 'loop=0' argument makes the GIF loop indefinitely
+    with imageio.get_writer(gif_name, mode='I', fps=fps, loop=0) as writer:
         for filename in filenames:
             image = imageio.imread(filename)
             writer.append_data(image)
@@ -28,4 +29,4 @@ def create_gif(image_folder='output_frames', gif_name='simulation.gif', fps=15):
 
 if __name__ == '__main__':
     # You can customize the folder, output name, and frames per second here
-    create_gif(image_folder='output_frames', gif_name='2d_riemann_simulation.gif', fps=20)
+    create_gif(image_folder='output_frames', gif_name='dmr_simulation.gif', fps=20)
