@@ -132,6 +132,25 @@ pytest -v
 
 ---
 
+## GPU Acceleration with CUDA
+
+For higher performance on larger meshes, an alternative version of the solver has been implemented that uses CUDA via the CuPy library, allowing the calculations to be executed on NVIDIA GPUs. This code is located in the `src_gpu/` directory.
+
+The acceleration becomes significant on larger-scale problems, where the massive parallelism of the GPU can be fully leveraged. On smaller meshes, the overhead of data transfer between the CPU and GPU can result in slower runtimes compared to the CPU-based version.
+
+### Performance Example: Double Mach Reflection (DMR)
+
+The table below compares the execution times (in seconds) between the CPU (NumPy) and GPU (CuPy) implementations for the DMR problem at different resolutions.
+
+| Resolution | CPU (s) | GPU (s) |
+| :--------- | :------ | :------ |
+| 240x60     | 8.90    | 14.71   |
+| 420x120    | 77.86   | 31.25   |
+| 960x420    | 659.65  | 73.31   |
+
+
+---
+
 ## Documentation
 
 A more detailed document explaining the numerical methods and theory behind the solver will be added to the `/doc` folder as a PDF in the future.
