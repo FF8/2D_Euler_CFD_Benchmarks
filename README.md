@@ -145,9 +145,10 @@ The table below compares the execution times (in seconds) between the CPU (NumPy
 | Resolution | CPU (s) | GPU (s) |
 | :--------- | :------ | :------ |
 | 240x60     | 8.90    | 14.71   |
-| 420x120    | 77.86   | 31.25   |
-| 960x420    | 659.65  | 73.31   |
+| 480x120    | 77.86   | 31.25   |
+| 960x240    | 659.65  | 73.31   |
 
+The CPU used for these tests is an Intel(R) Core(TM) i7-14650HX with 12 cores and 2 threads per core. The GPU is a NVIDIA GeForce RTX 4070 Laptop.
 
 ---
 
