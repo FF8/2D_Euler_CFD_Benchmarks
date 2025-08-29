@@ -29,4 +29,4 @@ def create_gif(image_folder='output_frames', gif_name='simulation.gif', fps=15):
 
 if __name__ == '__main__':
     # You can customize the folder, output name, and frames per second here
-    create_gif(image_folder='output_frames', gif_name='dmr_simulation.gif', fps=20)
+    create_gif(image_folder='output_frames', gif_name='sedov_explosion_simulation.gif', fps=20)

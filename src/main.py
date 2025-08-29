@@ -31,7 +31,7 @@ def run_simulation(args):
         'dmr': setup_dmr,
         '2d_riemann': setup_2d_riemann,
         '2d_sod': setup_2d_sod,
-        'blast': setup_sedov_explosion
+        'sedov_explosion': setup_sedov_explosion
         }
     if args.problem not in problem_setups:
         raise ValueError(f"Unknown problem_type: {args.problem}")

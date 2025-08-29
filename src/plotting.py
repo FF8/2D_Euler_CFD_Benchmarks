@@ -38,6 +38,13 @@ def plot_results(X, Y, rho, t, ny, problem_type, config_str, save_path=None):
         plt.contour(X, Y, rho, levels=line_levels, colors='white', linewidths=0.5)
         plt.contourf(X, Y, rho, levels=levels, cmap='jet')
 
+    elif problem_type == 'sedov_explosion':
+        fig.set_size_inches(9, 8)
+        # Dynamically set contour levels based on the current density range
+        min_rho, max_rho = np.nanmin(rho), np.nanmax(rho)
+        levels = np.linspace(min_rho, max_rho, 100)
+        plt.contourf(X, Y, rho, levels=levels, cmap='jet')
+
     elif problem_type == '2d_sod':
         fig.set_size_inches(16, 4)
         plt.imshow(rho, cmap='jet', extent=[X.min(), X.max(), Y.min(), Y.max()], origin='lower', aspect='auto')

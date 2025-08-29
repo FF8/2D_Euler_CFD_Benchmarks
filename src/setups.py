@@ -96,7 +96,7 @@ def setup_2d_sod():
 
 def setup_sedov_explosion():
     """Setup for the Sedov Explosion problem."""
-    nx, ny, x_max, y_max, t_final = 200, 200, 1.0, 1.0, 0.1
+    nx, ny, x_max, y_max, t_final = 200, 200, 1.0, 1.0, 0.05
     dx, dy = x_max / nx, y_max / ny
     
     # Center the computational domain at (0,0)
