@@ -11,7 +11,7 @@ import os # <<< NEW: Import os for directory handling
 
 # --- Local Module Imports ---
 from config import CFL, GAMMA
-from setups import setup_dmr, setup_2d_riemann, setup_2d_sod
+from setups import setup_dmr, setup_2d_riemann, setup_2d_sod, setup_sedov_explosion
 from schemes import calculate_rhs
 from utils import cons_to_prim_general
 from plotting import plot_results
@@ -117,7 +117,7 @@ def run_simulation(args):
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description="A 2D Euler equation solver for CFD benchmarks.")
     
-    parser.add_argument('--problem', type=str, default='dmr', choices=['dmr', '2d_riemann', '2d_sod'], help='The benchmark problem to solve.')
+    parser.add_argument('--problem', type=str, default='dmr', choices=['dmr', '2d_riemann', '2d_sod', 'sedov_explosion'], help='The benchmark problem to solve.')
     parser.add_argument('--scheme', type=str, default='piecewise_linear', choices=['piecewise_constant', 'piecewise_linear'], help='The spatial reconstruction scheme.')
     parser.add_argument('--integrator', type=str, default='ssprk2', choices=['euler', 'ssprk2'], help='The time integration scheme.')
     parser.add_argument('--solver', type=str, default='hllc', choices=['hll', 'hllc'], help='The Riemann solver to use for numerical flux.')

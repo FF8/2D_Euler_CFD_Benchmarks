@@ -55,7 +55,7 @@ def apply_boundary_conditions(P_padded, bc_params, t):
             P_padded[:, ghost_j, N_GHOST + wedge_start_idx:] = P_padded[:, phys_j, N_GHOST + wedge_start_idx:]
             P_padded[2, ghost_j, N_GHOST + wedge_start_idx:] *= -1.0 # Invert v
 
-    elif problem_type == '2d_riemann':
+    elif problem_type == '2d_riemann' or problem_type == 'sedov_explosion':
         # --- 2D Riemann Boundaries (Transmissive/Outflow) ---
         for i in range(N_GHOST):
             P_padded[:, :, i] = P_padded[:, :, N_GHOST]
