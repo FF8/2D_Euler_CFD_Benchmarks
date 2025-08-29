@@ -9,7 +9,7 @@ from utils import primitive_to_conserved_general
 
 def setup_dmr():
     """Setup for the Double Mach Reflection problem."""
-    nx, ny, x_max, y_max, t_final = 240, 60, 4.0, 1.0, 0.2
+    nx, ny, x_max, y_max, t_final = 480, 120, 4.0, 1.0, 0.2
     dx, dy = x_max / nx, y_max / ny
     x = np.linspace(dx / 2, x_max - dx / 2, nx)
     y = np.linspace(dy / 2, y_max - dy / 2, ny)
@@ -71,7 +71,7 @@ def setup_2d_riemann():
 
 def setup_2d_sod():
     """Setup for the 2D Sod Shock Tube problem."""
-    nx, ny, x_max, y_max, t_final = 400, 40, 1.0, 0.1, 0.2
+    nx, ny, x_max, y_max, t_final = 200, 10, 1.0, 0.1, 0.2
     dx, dy = x_max / nx, y_max / ny
     x = np.linspace(dx / 2, x_max - dx / 2, nx)
     y = np.linspace(dy / 2, y_max - dy / 2, ny)
@@ -86,6 +86,47 @@ def setup_2d_sod():
     v = np.zeros_like(X)
     
     U = primitive_to_conserved_general(np.array([rho, u, v, p]))
+    params = {
+        'nx': nx, 'ny': ny, 'x_max': x_max, 'y_max': y_max, 't_final': t_final,
+        'X': X, 'Y': Y, 'dx': dx, 'dy': dy
+    }
+    return U, params
+
+
+
+def setup_sedov_explosion():
+    """Setup for the Sedov Explosion problem."""
+    nx, ny, x_max, y_max, t_final = 200, 200, 1.0, 1.0, 0.1
+    dx, dy = x_max / nx, y_max / ny
+    
+    # Center the computational domain at (0,0)
+    x = np.linspace(-x_max / 2 + dx / 2, x_max / 2 - dx / 2, nx)
+    y = np.linspace(-y_max / 2 + dy / 2, y_max / 2 - dy / 2, ny)
+    X, Y = np.meshgrid(x, y)
+
+    # Ambient conditions
+    p_ambient = 2.5e-11  # Use a small number for pressure instead of zero
+    rho_ambient = 1.0
+    
+    # Calculate blast pressure based on total energy deposition
+    r0 = 1.5 * dx  # Radius of the initial high-pressure region
+    total_energy = 1.0
+    p_blast = total_energy * (GAMMA - 1) / (np.pi * r0**2)
+    
+    # Create a circular mask for the blast region
+    radius = np.sqrt(X**2 + Y**2)
+    mask = radius <= r0
+    
+    # Initialize primitive variables
+    rho = np.ones_like(X) * rho_ambient
+    p = np.full_like(X, p_ambient)
+    p[mask] = p_blast
+    u = np.zeros_like(X)
+    v = np.zeros_like(X)
+    
+    # Convert from primitive to conserved variables
+    U = primitive_to_conserved_general(np.array([rho, u, v, p]))
+    
     params = {
         'nx': nx, 'ny': ny, 'x_max': x_max, 'y_max': y_max, 't_final': t_final,
         'X': X, 'Y': Y, 'dx': dx, 'dy': dy
